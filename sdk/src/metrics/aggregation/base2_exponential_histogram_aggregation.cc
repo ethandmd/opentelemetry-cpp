@@ -271,25 +271,6 @@ std::unique_ptr<Aggregation> Base2ExponentialHistogramAggregation::Diff(
       new Base2ExponentialHistogramAggregation(std::move(result_value))};
 }
 
-// std::unique_ptr<Aggregation> Base2ExponentialHistogramAggregation::Diff(
-//     const Aggregation &next) const noexcept
-// {
-//   auto curr_value = nostd::get<Base2ExponentialHistogramPointData>(ToPoint());
-//   auto next_value = nostd::get<Base2ExponentialHistogramPointData>(
-//       (static_cast<const Base2ExponentialHistogramAggregation &>(next).ToPoint()));
-
-//   Base2ExponentialHistogramPointData result_value;
-//   result_value.scale_          = curr_value.scale_;
-//   result_value.max_buckets_    = curr_value.max_buckets_;
-//   result_value.record_min_max_ = false;
-//   result_value.count_          = next_value.count_ - curr_value.count_;
-//   result_value.sum_            = next_value.sum_ - curr_value.sum_;
-//   result_value.zero_count_     = next_value.zero_count_ - curr_value.zero_count_;
-
-//   return std::unique_ptr<Base2ExponentialHistogramAggregation>{
-//       new Base2ExponentialHistogramAggregation(std::move(result_value))};
-// }
-
 PointType Base2ExponentialHistogramAggregation::ToPoint() const noexcept
 {
   const std::lock_guard<opentelemetry::common::SpinLockMutex> locked(lock_);
