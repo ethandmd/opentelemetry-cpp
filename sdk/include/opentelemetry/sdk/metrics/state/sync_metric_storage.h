@@ -29,6 +29,9 @@
 #include "opentelemetry/sdk/metrics/view/attributes_processor.h"
 #include "opentelemetry/version.h"
 
+#include <cassert>
+
+
 #ifdef ENABLE_METRICS_EXEMPLAR_PREVIEW
 #  include "opentelemetry/sdk/metrics/exemplar/filter_type.h"
 #  include "opentelemetry/sdk/metrics/exemplar/reservoir.h"
@@ -159,6 +162,8 @@ public:
     }
 #endif
     std::lock_guard<opentelemetry::common::SpinLockMutex> guard(attribute_hashmap_lock_);
+    assert(attributes_processor_ != nullptr);
+    assert(attributes_hashmap_ != nullptr);
     attributes_hashmap_
         ->GetOrSetDefault(attributes, attributes_processor_, create_default_aggregation_)
         ->Aggregate(value);
