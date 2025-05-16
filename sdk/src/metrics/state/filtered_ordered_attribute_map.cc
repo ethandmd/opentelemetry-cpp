@@ -16,8 +16,10 @@ FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
     const AttributesProcessor *processor)
     : OrderedAttributeMap()
 {
+  assert(processor);
   attributes.ForEachKeyValue(
       [&](nostd::string_view key, opentelemetry::common::AttributeValue value) noexcept {
+        assert(key.data());
         if (!processor || processor->isPresent(key))
         {
           SetAttribute(key, value);
