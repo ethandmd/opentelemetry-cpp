@@ -29,6 +29,8 @@
 #include "opentelemetry/sdk/metrics/view/attributes_processor.h"
 #include "opentelemetry/version.h"
 
+#include "opentelemetry/sdk/common/global_log_handler.h"
+
 #include <cassert>
 
 
@@ -162,8 +164,7 @@ public:
     }
 #endif
     std::lock_guard<opentelemetry::common::SpinLockMutex> guard(attribute_hashmap_lock_);
-    assert(attributes_processor_ != nullptr);
-    assert(attributes_hashmap_ != nullptr);
+    OTEL_INTERNAL_LOG_WARN("Hey, we are recording :)");
     attributes_hashmap_
         ->GetOrSetDefault(attributes, attributes_processor_, create_default_aggregation_)
         ->Aggregate(value);
