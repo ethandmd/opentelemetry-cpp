@@ -22,6 +22,8 @@
 
 #include "opentelemetry/sdk/common/global_log_handler.h"
 
+#include <stdexcept>
+
 OPENTELEMETRY_BEGIN_NAMESPACE
 namespace sdk
 {
@@ -142,6 +144,7 @@ void Base2ExponentialHistogramAggregation::Aggregate(
     double value,
     const PointAttributes & /* attributes */) noexcept
 {
+  std::runtime_error("GetOrSetDefault 5");
   const std::lock_guard<opentelemetry::common::SpinLockMutex> locked(lock_);
   point_data_.sum_ += value;
   point_data_.count_++;
