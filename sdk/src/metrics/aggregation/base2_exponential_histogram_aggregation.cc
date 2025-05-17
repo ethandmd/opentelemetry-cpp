@@ -20,6 +20,8 @@
 #include "opentelemetry/sdk/metrics/data/point_data.h"
 #include "opentelemetry/version.h"
 
+#include "opentelemetry/sdk/common/global_log_handler.h"
+
 OPENTELEMETRY_BEGIN_NAMESPACE
 namespace sdk
 {
@@ -31,6 +33,7 @@ namespace
 
 uint32_t GetScaleReduction(int32_t start_index, int32_t end_index, size_t max_buckets) noexcept
 {
+  OTEL_INTERNAL_LOG_WARN("GetScaleReduction");
   uint32_t scale_reduction = 0;
   while (static_cast<size_t>(end_index - start_index + 1) > max_buckets)
   {
@@ -43,6 +46,7 @@ uint32_t GetScaleReduction(int32_t start_index, int32_t end_index, size_t max_bu
 
 void DownscaleBuckets(std::unique_ptr<AdaptingCircularBufferCounter> &buckets, uint32_t by) noexcept
 {
+  OTEL_INTERNAL_LOG_WARN("DownscaleBuckets");
   if (buckets->Empty())
   {
     return;
@@ -173,6 +177,7 @@ void Base2ExponentialHistogramAggregation::AggregateIntoBuckets(
     std::unique_ptr<AdaptingCircularBufferCounter> &buckets,
     double value) noexcept
 {
+  OTEL_INTERNAL_LOG_WARN("AggregateIntoBuckets");
   if (!buckets)
   {
     buckets = std::make_unique<AdaptingCircularBufferCounter>(point_data_.max_buckets_);
@@ -202,6 +207,7 @@ void Base2ExponentialHistogramAggregation::Downscale(uint32_t by) noexcept
   {
     return;
   }
+  OTEL_INTERNAL_LOG_WARN("Downscale");
 
   if (point_data_.positive_buckets_)
   {
@@ -222,6 +228,7 @@ AdaptingCircularBufferCounter MergeBuckets(size_t max_buckets,
                                            const AdaptingCircularBufferCounter &A,
                                            const AdaptingCircularBufferCounter &B)
 {
+  OTEL_INTERNAL_LOG_WARN("Downscale");
   AdaptingCircularBufferCounter C = AdaptingCircularBufferCounter(max_buckets);
   C.Clear();
 
@@ -256,6 +263,7 @@ AdaptingCircularBufferCounter MergeBuckets(size_t max_buckets,
 std::unique_ptr<Aggregation> Base2ExponentialHistogramAggregation::Merge(
     const Aggregation &delta) const noexcept
 {
+  OTEL_INTERNAL_LOG_WARN("Merge");
   auto left  = nostd::get<Base2ExponentialHistogramPointData>(ToPoint());
   auto right = nostd::get<Base2ExponentialHistogramPointData>(
       (static_cast<const Base2ExponentialHistogramAggregation &>(delta).ToPoint()));

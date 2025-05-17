@@ -19,6 +19,8 @@
 #include "opentelemetry/sdk/metrics/view/attributes_processor.h"
 #include "opentelemetry/version.h"
 
+#include "opentelemetry/sdk/common/global_log_handler.h"
+
 OPENTELEMETRY_BEGIN_NAMESPACE
 namespace sdk
 {
@@ -102,6 +104,7 @@ public:
       const MetricAttributes &attributes,
       nostd::function_ref<std::unique_ptr<Aggregation>()> aggregation_callback)
   {
+    OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; const attributes, aggregation_callback");
     auto it = hash_map_.find(attributes);
     if (it != hash_map_.end())
     {
@@ -121,6 +124,7 @@ public:
       MetricAttributes &&attributes,
       nostd::function_ref<std::unique_ptr<Aggregation>()> aggregation_callback)
   {
+    OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; attributes, aggregation_callback");
     auto it = hash_map_.find(attributes);
     if (it != hash_map_.end())
     {
@@ -131,7 +135,7 @@ public:
     {
       return GetOrSetOveflowAttributes(aggregation_callback);
     }
-
+    OTEL_INTERNAL_LOG_WARN("auto result = hash_map_.emplace(std::move(attributes), aggregation_callback())");
     auto result = hash_map_.emplace(std::move(attributes), aggregation_callback());
     return result.first->second.get();
   }
