@@ -20,6 +20,8 @@
 #include "opentelemetry/version.h"
 
 #include "opentelemetry/sdk/common/global_log_handler.h"
+#include <stdexcept>
+
 
 OPENTELEMETRY_BEGIN_NAMESPACE
 namespace sdk
@@ -93,10 +95,12 @@ public:
 
     if (IsOverflowAttributes())
     {
+      std::runtime_error("GetOrSetDefault 0");
       return GetOrSetOveflowAttributes(aggregation_callback);
     }
-
+    std::runtime_error("GetOrSetDefault 1");
     auto result = hash_map_.emplace(std::move(attr), aggregation_callback());
+    std::runtime_error("GetOrSetDefault 2");
     return result.first->second.get();
   }
 
@@ -227,7 +231,7 @@ private:
     {
       return it->second.get();
     }
-
+    std::runtime_error("GetOrSetDefault 4");
     auto result = hash_map_.emplace(kOverflowAttributes, std::move(agg));
     return result.first->second.get();
   }
