@@ -92,15 +92,12 @@ public:
     {
       return it->second.get();
     }
-
+    throw std::runtime_error("GetOrSetDefault 0");
     if (IsOverflowAttributes())
     {
-      std::runtime_error("GetOrSetDefault 0");
       return GetOrSetOveflowAttributes(aggregation_callback);
     }
-    std::runtime_error("GetOrSetDefault 1");
     auto result = hash_map_.emplace(std::move(attr), aggregation_callback());
-    std::runtime_error("GetOrSetDefault 2");
     return result.first->second.get();
   }
 
@@ -114,7 +111,7 @@ public:
     {
       return it->second.get();
     }
-
+    throw std::runtime_error("GetOrSetDefault 0");
     if (IsOverflowAttributes())
     {
       return GetOrSetOveflowAttributes(aggregation_callback);
