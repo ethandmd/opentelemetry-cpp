@@ -144,7 +144,7 @@ void Base2ExponentialHistogramAggregation::Aggregate(
     double value,
     const PointAttributes & /* attributes */) noexcept
 {
-  std::runtime_error("GetOrSetDefault 5");
+  throw std::runtime_error("GetOrSetDefault 5");
   const std::lock_guard<opentelemetry::common::SpinLockMutex> locked(lock_);
   point_data_.sum_ += value;
   point_data_.count_++;
@@ -180,7 +180,7 @@ void Base2ExponentialHistogramAggregation::AggregateIntoBuckets(
     std::unique_ptr<AdaptingCircularBufferCounter> &buckets,
     double value) noexcept
 {
-  OTEL_INTERNAL_LOG_WARN("AggregateIntoBuckets");
+  //OTEL_INTERNAL_LOG_WARN("AggregateIntoBuckets");
   if (!buckets)
   {
     buckets = std::make_unique<AdaptingCircularBufferCounter>(point_data_.max_buckets_);

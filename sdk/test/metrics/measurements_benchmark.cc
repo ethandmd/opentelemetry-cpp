@@ -29,6 +29,7 @@
 #include "opentelemetry/sdk/metrics/view/view_factory.h"
 #include "opentelemetry/sdk/metrics/view/instrument_selector.h"
 #include "opentelemetry/sdk/metrics/view/instrument_selector_factory.h"
+#include "opentelemetry/sdk/metrics/view/meter_selector_factory.h"
 
 
 using namespace opentelemetry;
@@ -122,7 +123,7 @@ void BM_MeasurementsBase2HistogramTest(benchmark::State &state)
       InstrumentType::kHistogram, "*", "");
   mp.AddView(
       std::unique_ptr<InstrumentSelector>(std::move(histogram_base2_instrument_selector)),
-      std::unique_ptr<MeterSelector>(new MeterSelector("exphist", "", "")),
+      std::unique_ptr<MeterSelector>(MeterSelectorFactory::Create("", "", "")),
       std::move(histogram_base2_view));
   auto m = mp.GetMeter("meter1", "version1", "schema1");
 
