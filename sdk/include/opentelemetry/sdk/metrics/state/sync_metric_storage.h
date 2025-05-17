@@ -164,7 +164,7 @@ public:
     }
 #endif
     std::lock_guard<opentelemetry::common::SpinLockMutex> guard(attribute_hashmap_lock_);
-    OTEL_INTERNAL_LOG_WARN("Hey, we are recording :)");
+    //OTEL_INTERNAL_LOG_WARN("Hey, we are recording :)");
     attributes_hashmap_
         ->GetOrSetDefault(attributes, attributes_processor_, create_default_aggregation_)
         ->Aggregate(value);
