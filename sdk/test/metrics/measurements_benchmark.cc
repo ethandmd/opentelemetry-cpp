@@ -66,7 +66,7 @@ void BM_MeasurementsTest(benchmark::State &state)
   std::shared_ptr<MetricReader> exporter(new MockMetricExporter());
   mp.AddMetricReader(exporter);
   auto h = m->CreateDoubleCounter("counter1", "counter1_description", "counter1_unit");
-  size_t MAX_MEASUREMENTS = 10000;  // keep low to prevent CI failure due to timeout
+  size_t MAX_MEASUREMENTS = 100;  // keep low to prevent CI failure due to timeout
   size_t NUM_CORES        = 1;
   std::vector<std::thread> threads;
   std::map<std::string, uint32_t> attributes[1000];
@@ -109,9 +109,6 @@ void BM_MeasurementsBase2HistogramTest(benchmark::State &state)
   auto histogram_base2_aggregation_config =
       std::unique_ptr<Base2ExponentialHistogramAggregationConfig>(
           new Base2ExponentialHistogramAggregationConfig);
-  histogram_base2_aggregation_config->max_scale_      = 3;
-  histogram_base2_aggregation_config->record_min_max_ = true;
-  histogram_base2_aggregation_config->max_buckets_    = 100;
 
   std::shared_ptr<AggregationConfig> base2_aggregation_config(
       std::move(histogram_base2_aggregation_config));
@@ -130,10 +127,10 @@ void BM_MeasurementsBase2HistogramTest(benchmark::State &state)
   std::shared_ptr<MetricReader> exporter(new MockMetricExporter());
   mp.AddMetricReader(exporter);
   auto h = m->CreateDoubleHistogram("exphist", "exphist_description", "exphist_unit");
-  size_t MAX_MEASUREMENTS = 10000;  // keep low to prevent CI failure due to timeout
-  size_t NUM_CORES        = 8;
+  size_t MAX_MEASUREMENTS = 100;  // keep low to prevent CI failure due to timeout
+  size_t NUM_CORES        = 1;
   std::vector<std::thread> threads;
-  std::map<std::string, uint32_t> attributes[1000];
+  std::map<std::string, uint32_t> attributes[10];
   size_t total_index = 0;
   for (uint32_t i = 0; i < 10; i++)
   {

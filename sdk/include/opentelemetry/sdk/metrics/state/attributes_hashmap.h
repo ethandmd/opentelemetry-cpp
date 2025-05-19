@@ -92,7 +92,6 @@ public:
     {
       return it->second.get();
     }
-    throw std::runtime_error("GetOrSetDefault 0");
     if (IsOverflowAttributes())
     {
       return GetOrSetOveflowAttributes(aggregation_callback);
@@ -111,7 +110,6 @@ public:
     {
       return it->second.get();
     }
-    throw std::runtime_error("GetOrSetDefault 0");
     if (IsOverflowAttributes())
     {
       return GetOrSetOveflowAttributes(aggregation_callback);
@@ -223,12 +221,12 @@ private:
 
   Aggregation *GetOrSetOveflowAttributes(std::unique_ptr<Aggregation> agg)
   {
+    OTEL_INTERNAL_LOG_WARN("GetOrSetOveflowAttributes");
     auto it = hash_map_.find(kOverflowAttributes);
     if (it != hash_map_.end())
     {
       return it->second.get();
     }
-    std::runtime_error("GetOrSetDefault 4");
     auto result = hash_map_.emplace(kOverflowAttributes, std::move(agg));
     return result.first->second.get();
   }

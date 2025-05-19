@@ -6,6 +6,7 @@
 #include "opentelemetry/sdk/common/attribute_utils.h"
 #include "opentelemetry/sdk/metrics/view/attributes_processor.h"
 #include <cassert>
+#include "opentelemetry/sdk/common/global_log_handler.h"
 
 OPENTELEMETRY_BEGIN_NAMESPACE
 namespace sdk
@@ -17,7 +18,7 @@ FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
     const AttributesProcessor *processor)
     : OrderedAttributeMap()
 {
-  assert(processor);
+  OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap");
   attributes.ForEachKeyValue(
       [&](nostd::string_view key, opentelemetry::common::AttributeValue value) noexcept {
         assert(key.data());

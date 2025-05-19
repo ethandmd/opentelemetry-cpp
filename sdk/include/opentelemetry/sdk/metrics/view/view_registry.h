@@ -18,6 +18,8 @@
 #include "opentelemetry/sdk/metrics/view/view.h"
 #include "opentelemetry/version.h"
 
+#include "opentelemetry/sdk/common/global_log_handler.h"
+
 OPENTELEMETRY_BEGIN_NAMESPACE
 namespace sdk
 {
@@ -46,7 +48,7 @@ public:
                std::unique_ptr<opentelemetry::sdk::metrics::View> view)
   {
     // TBD - thread-safe ?
-
+    OTEL_INTERNAL_LOG_WARN("ViewRegistry::AddView (This is \"TBD - thread-safe\"");
     auto registered_view = std::unique_ptr<RegisteredView>(new RegisteredView{
         std::move(instrument_selector), std::move(meter_selector), std::move(view)});
     registered_views_.push_back(std::move(registered_view));
@@ -57,9 +59,11 @@ public:
       const opentelemetry::sdk::instrumentationscope::InstrumentationScope &instrumentation_scope,
       nostd::function_ref<bool(const View &)> callback) const
   {
+    OTEL_INTERNAL_LOG_WARN("ViewRegistry::FindViews");
     bool found = false;
     for (auto const &registered_view : registered_views_)
     {
+      OTEL_INTERNAL_LOG_WARN("ViewRegistry::FindViews - registered_view: " << registered_view->view_->GetName());
       if (MatchMeter(registered_view->meter_selector_.get(), instrumentation_scope) &&
           MatchInstrument(registered_view->instrument_selector_.get(), instrument_descriptor))
       {
@@ -91,6 +95,7 @@ private:
       opentelemetry::sdk::metrics::MeterSelector *selector,
       const opentelemetry::sdk::instrumentationscope::InstrumentationScope &instrumentation_scope)
   {
+    OTEL_INTERNAL_LOG_WARN("ViewRegistry::MatchMeter");
     return selector->GetNameFilter()->Match(instrumentation_scope.GetName()) &&
            (instrumentation_scope.GetVersion().size() == 0 ||
             selector->GetVersionFilter()->Match(instrumentation_scope.GetVersion())) &&
@@ -102,6 +107,7 @@ private:
       opentelemetry::sdk::metrics::InstrumentSelector *selector,
       const opentelemetry::sdk::metrics::InstrumentDescriptor &instrument_descriptor)
   {
+    OTEL_INTERNAL_LOG_WARN("ViewRegistry::MatchInstrument");
     return selector->GetNameFilter()->Match(instrument_descriptor.name_) &&
            selector->GetUnitFilter()->Match(instrument_descriptor.unit_) &&
            (selector->GetInstrumentType() == instrument_descriptor.type_);
