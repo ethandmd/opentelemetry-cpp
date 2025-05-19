@@ -130,7 +130,7 @@ void BM_MeasurementsBase2HistogramTest(benchmark::State &state)
   size_t MAX_MEASUREMENTS = 100;  // keep low to prevent CI failure due to timeout
   size_t NUM_CORES        = 1;
   std::vector<std::thread> threads;
-  std::map<std::string, uint32_t> attributes[10];
+  std::map<std::string, uint32_t> attributes[1000];
   size_t total_index = 0;
   for (uint32_t i = 0; i < 10; i++)
   {

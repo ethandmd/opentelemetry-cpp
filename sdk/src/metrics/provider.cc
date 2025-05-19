@@ -8,6 +8,8 @@
 #include "opentelemetry/sdk/metrics/provider.h"
 #include "opentelemetry/version.h"
 
+#include "opentelemetry/sdk/common/global_log_handler.h"
+
 OPENTELEMETRY_BEGIN_NAMESPACE
 namespace sdk
 {
@@ -17,6 +19,7 @@ namespace metrics
 void Provider::SetMeterProvider(
     const nostd::shared_ptr<opentelemetry::metrics::MeterProvider> &mp) noexcept
 {
+  OTEL_INTERNAL_LOG_WARN("Provider::SetMeterProvider");
   bool disabled = opentelemetry::sdk::common::GetSdkDisabled();
 
   if (!disabled)
