@@ -429,6 +429,7 @@ constexpr absl::OTABSL_OPTION_NAMESPACE_NAME::add_pointer_t<const T> get_if(
 template <typename Visitor, typename... Variants>
 variant_internal::VisitResult<Visitor, Variants...> visit(Visitor&& vis,
                                                           Variants&&... vars) {
+  OTEL_INTERNAL_LOG_WARN("absl::visit() ");
   return variant_internal::
       VisitIndices<variant_size<absl::OTABSL_OPTION_NAMESPACE_NAME::decay_t<Variants> >::value...>::Run(
           variant_internal::PerformVisitation<Visitor, Variants...>{

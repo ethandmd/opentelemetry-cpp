@@ -21,9 +21,17 @@ FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
   OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap");
   attributes.ForEachKeyValue(
       [&](nostd::string_view key, opentelemetry::common::AttributeValue value) noexcept {
-        assert(key.data());
+        if (!key.data())
+        {
+          OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap key is null");
+        }
+        if (!processor)
+        {
+          OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap processor is null");
+        }
         if (!processor || processor->isPresent(key))
         {
+          OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap key");
           SetAttribute(key, value);
         }
         return true;

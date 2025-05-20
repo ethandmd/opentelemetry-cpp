@@ -18,6 +18,8 @@
 #include "opentelemetry/nostd/variant.h"
 #include "opentelemetry/version.h"
 
+#include "opentelemetry/sdk/common/global_log_handler.h"
+
 OPENTELEMETRY_BEGIN_NAMESPACE
 namespace sdk
 {
@@ -291,6 +293,7 @@ public:
   void SetAttribute(nostd::string_view key,
                     const opentelemetry::common::AttributeValue &value) noexcept
   {
+    OTEL_INTERNAL_LOG_WARN("OrderedAttributeMap::SetAttribute");
     (*this)[std::string(key)] = nostd::visit(converter_, value);
   }
 
