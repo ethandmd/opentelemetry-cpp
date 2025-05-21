@@ -19,16 +19,21 @@ FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
     : OrderedAttributeMap()
 {
   OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap");
+  OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap attributes @" 
+                         << static_cast<const void *>(&attributes));
+  if (!processor)
+  {
+    OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap processor is null");
+  }
   attributes.ForEachKeyValue(
       [&](nostd::string_view key, opentelemetry::common::AttributeValue value) noexcept {
+        OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap key: " 
+                               << key);
         if (!key.data())
         {
           OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap key is null");
         }
-        if (!processor)
-        {
-          OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap processor is null");
-        }
+        OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap isPresent check...");
         if (!processor || processor->isPresent(key))
         {
           OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap key");
@@ -36,7 +41,7 @@ FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
         }
         return true;
       });
-
+  OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap UpdatingHash...");
   UpdateHash();
 }
 
