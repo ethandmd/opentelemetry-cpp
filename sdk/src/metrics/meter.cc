@@ -649,6 +649,7 @@ std::unique_ptr<AsyncWritableMetricStorage> Meter::RegisterAsyncMetricStorage(
 std::vector<MetricData> Meter::Collect(CollectorHandle *collector,
                                        opentelemetry::common::SystemTimestamp collect_ts) noexcept
 {
+  OTEL_INTERNAL_LOG_WARN("[Meter::Collect] - Collecting metrics");
   if (!meter_config_.IsEnabled())
   {
     return std::vector<MetricData>();

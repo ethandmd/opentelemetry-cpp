@@ -261,6 +261,7 @@ AdaptingCircularBufferCounter MergeBuckets(size_t max_buckets,
 std::unique_ptr<Aggregation> Base2ExponentialHistogramAggregation::Merge(
     const Aggregation &delta) const noexcept
 {
+  OTEL_INTERNAL_LOG_WARN("Base2ExponentialHistogramAggregation::Merge");
   auto left  = nostd::get<Base2ExponentialHistogramPointData>(ToPoint());
   auto right = nostd::get<Base2ExponentialHistogramPointData>(
       (static_cast<const Base2ExponentialHistogramAggregation &>(delta).ToPoint()));
@@ -345,6 +346,7 @@ std::unique_ptr<Aggregation> Base2ExponentialHistogramAggregation::Merge(
 std::unique_ptr<Aggregation> Base2ExponentialHistogramAggregation::Diff(
     const Aggregation &next) const noexcept
 {
+  OTEL_INTERNAL_LOG_WARN("Base2ExponentialHistogramAggregation::Diff");
   auto left  = nostd::get<Base2ExponentialHistogramPointData>(ToPoint());
   auto right = nostd::get<Base2ExponentialHistogramPointData>(
       (static_cast<const Base2ExponentialHistogramAggregation &>(next).ToPoint()));

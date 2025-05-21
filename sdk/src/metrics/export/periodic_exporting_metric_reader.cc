@@ -166,6 +166,8 @@ bool PeriodicExportingMetricReader::CollectAndExportOnce()
 #endif /* ENABLE_THREAD_INSTRUMENTATION_PREVIEW */
     auto start = std::chrono::steady_clock::now();
     this->Collect([this, &start](ResourceMetrics &metric_data) {
+      OTEL_INTERNAL_LOG_WARN(
+          "[Periodic Exporting Metric Reader] Collecting metrics");
       auto end = std::chrono::steady_clock::now();
       if ((end - start) > this->export_timeout_millis_)
       {
@@ -214,6 +216,7 @@ bool PeriodicExportingMetricReader::CollectAndExportOnce()
 
 bool PeriodicExportingMetricReader::OnForceFlush(std::chrono::microseconds timeout) noexcept
 {
+  OTEL_INTERNAL_LOG_WARN("[Periodic Exporting Metric Reader] Force flushing metrics");
   std::unique_lock<std::mutex> lk_cv(force_flush_m_);
   std::uint64_t current_sequence =
       force_flush_pending_sequence_.fetch_add(1, std::memory_order_release) + 1;

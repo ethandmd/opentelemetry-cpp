@@ -68,6 +68,7 @@ bool MetricReader::Shutdown(std::chrono::microseconds timeout) noexcept
 /** Flush metric read by this reader **/
 bool MetricReader::ForceFlush(std::chrono::microseconds timeout) noexcept
 {
+  OTEL_INTERNAL_LOG_WARN("MetricReader::ForceFlush");
   bool status = true;
   if (IsShutdown())
   {
