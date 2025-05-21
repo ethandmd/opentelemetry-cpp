@@ -19,6 +19,10 @@ FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
     : OrderedAttributeMap()
 {
   OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap");
+  if (attributes.size() == 0)
+  {
+    OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap attributes size is 0");
+  }
   attributes.ForEachKeyValue(
       [&](nostd::string_view key, opentelemetry::common::AttributeValue value) noexcept {
         if (!key.data())
