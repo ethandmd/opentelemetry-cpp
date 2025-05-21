@@ -36,9 +36,10 @@ FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
         OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap isPresent check...");
         if (!processor || processor->isPresent(key))
         {
-          OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap key");
+          OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap Setting Attribute...");
           SetAttribute(key, value);
         }
+        OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap Did not Set Attributes...");
         return true;
       });
   OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap UpdatingHash...");
