@@ -86,46 +86,45 @@ public:
     // TODO: avoid constructing MetricAttributes from KeyValueIterable for
     // hash_map_.find which is a heavy operation
     MetricAttributes attr{attributes, attributes_processor};
+
     auto it = hash_map_.find(attr);
     if (it != hash_map_.end())
     {
-      auto ret = it->second.get();
+      return it->second.get();
       // if (!ret)
       // {
       //   OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; ret is null");
       // }
-      return ret;
     }
     if (IsOverflowAttributes())
     {
-      OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; IsOverflowAttributes");
-      auto ret = GetOrSetOveflowAttributes(aggregation_callback);
+      // OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; IsOverflowAttributes");
+      return GetOrSetOveflowAttributes(aggregation_callback);
       // if (!ret)
       // {
       //   OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; ret is null");
       // }
-      return ret;
     }
     // OTEL_INTERNAL_LOG_WARN("GetOrSetDefault;");
     auto result = hash_map_.emplace(std::move(attr), aggregation_callback());
-    auto ret = result.first->second.get();
+    return result.first->second.get();
     // if (!ret)
     // {
     //   OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; ret is null");
     // }
-    return ret;
   }
 
   Aggregation *GetOrSetDefault(
       const MetricAttributes &attributes,
       nostd::function_ref<std::unique_ptr<Aggregation>()> aggregation_callback)
   {
-    OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; const attributes, aggregation_callback");
+    // OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; const attributes, aggregation_callback");
     auto it = hash_map_.find(attributes);
     if (it != hash_map_.end())
     {
       return it->second.get();
     }
+
     if (IsOverflowAttributes())
     {
       return GetOrSetOveflowAttributes(aggregation_callback);
