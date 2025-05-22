@@ -18,28 +18,29 @@ FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
     const AttributesProcessor *processor)
     : OrderedAttributeMap()
 {
-  OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap");
+  // OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap");
   OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap attributes @" 
                          << static_cast<const void *>(&attributes));
-  if (!processor)
-  {
-    OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap processor is null");
-  }
+  // if (!processor)
+  // {
+  //   OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap processor is null");
+  // }
   attributes.ForEachKeyValue(
       [&](nostd::string_view key, opentelemetry::common::AttributeValue value) noexcept {
-        OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap inside foreach");
-        OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap key: " 
-                               << key);
-        OTEL_INTERNAL_LOG_WARN("Processor address: " << static_cast<const void*>(processor));
+        // OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap inside foreach");
+        OTEL_INTERNAL_LOG_WARN("Processor address: " << static_cast<const void*>(processor) << " key: " << key);
 
         if (!key.data())
         {
           OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap key is null");
         }
-        OTEL_INTERNAL_LOG_WARN("Finished checking if key is null");
+        else
+        {
+            OTEL_INTERNAL_LOG_WARN("Finished checking if key is null");
+        }
         if (!processor)
         {
-        OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap calling isPresent check...");
+        // OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap calling isPresent check...");
         auto isp = processor->isPresent(key);
         OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap is present returned");
             if (isp)
