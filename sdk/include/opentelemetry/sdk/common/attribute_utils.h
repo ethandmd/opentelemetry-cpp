@@ -18,7 +18,6 @@
 #include "opentelemetry/nostd/variant.h"
 #include "opentelemetry/version.h"
 
-
 OPENTELEMETRY_BEGIN_NAMESPACE
 namespace sdk
 {

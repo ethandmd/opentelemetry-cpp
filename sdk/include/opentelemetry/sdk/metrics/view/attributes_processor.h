@@ -96,11 +96,11 @@ public:
 
   bool isPresent(nostd::string_view key) const noexcept override
   {
-    if (!key.data())
-    {
-      OTEL_INTERNAL_LOG_WARN("FilteringAttributesProcessor::isPresent key is null");
-    }
-    OTEL_INTERNAL_LOG_WARN("FilteringAttributesProcessor::isPresent determining if key is present...");
+    // if (!key.data())
+    // {
+    //   OTEL_INTERNAL_LOG_WARN("FilteringAttributesProcessor::isPresent key is null");
+    // }
+    // OTEL_INTERNAL_LOG_WARN("FilteringAttributesProcessor::isPresent determining if key is present...");
     return (allowed_attribute_keys_.find(key.data()) != allowed_attribute_keys_.end());
   }
 

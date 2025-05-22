@@ -59,7 +59,7 @@ AggregationTemporality MetricCollector::GetAggregationTemporality(
 
 MetricProducer::Result MetricCollector::Produce() noexcept
 {
-  OTEL_INTERNAL_LOG_WARN("[MetricCollector::Produce]");
+  // OTEL_INTERNAL_LOG_WARN("[MetricCollector::Produce]");
   if (!meter_context_)
   {
     OTEL_INTERNAL_LOG_ERROR("[MetricCollector::Collect] - Error during collecting."
@@ -104,7 +104,7 @@ MetricProducer::Result MetricCollector::Produce() noexcept
       {
         continue;
       }
-      OTEL_INTERNAL_LOG_WARN("[MetricCollector::Produce] - Iterating PointDataAttributes");
+      // OTEL_INTERNAL_LOG_WARN("[MetricCollector::Produce] - Iterating PointDataAttributes");
       std::vector<PointDataAttributes> filtered_point_data_attrs;
       for (PointDataAttributes &point_data_attr : metric.point_data_attr_)
       {
@@ -116,7 +116,7 @@ MetricProducer::Result MetricCollector::Produce() noexcept
           filtered_point_data_attrs.emplace_back(std::move(point_data_attr));
         }
       }
-      OTEL_INTERNAL_LOG_WARN("[MetricCollector::Produce] - Filtered PointDataAttributes");
+      // OTEL_INTERNAL_LOG_WARN("[MetricCollector::Produce] - Filtered PointDataAttributes");
       if (!filtered_point_data_attrs.empty())
       {
         metric.point_data_attr_ = std::move(filtered_point_data_attrs);

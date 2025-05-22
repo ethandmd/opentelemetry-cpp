@@ -142,7 +142,7 @@ public:
       exemplar_reservoir_->OfferMeasurement(value, {}, context, std::chrono::system_clock::now());
     }
 #endif
-    OTEL_INTERNAL_LOG_WARN("SyncMetricStorage::RecordDouble no attributes");
+    // OTEL_INTERNAL_LOG_WARN("SyncMetricStorage::RecordDouble no attributes");
     static MetricAttributes attr = MetricAttributes{};
     std::lock_guard<opentelemetry::common::SpinLockMutex> guard(attribute_hashmap_lock_);
     attributes_hashmap_->GetOrSetDefault(attr, create_default_aggregation_)->Aggregate(value);
@@ -165,16 +165,16 @@ public:
     }
 #endif
     std::lock_guard<opentelemetry::common::SpinLockMutex> guard(attribute_hashmap_lock_);
-    OTEL_INTERNAL_LOG_WARN("SyncMetricStorage::RecordDouble");
+    // OTEL_INTERNAL_LOG_WARN("SyncMetricStorage::RecordDouble");
     auto buck1 = attributes_hashmap_->GetOrSetDefault(attributes, attributes_processor_, create_default_aggregation_);
-    OTEL_INTERNAL_LOG_WARN("SyncMetricStorage::RecordDouble buck1");
-    if (!buck1)
+    // OTEL_INTERNAL_LOG_WARN("SyncMetricStorage::RecordDouble buck1");
+    if (buck1)
     {
-      OTEL_INTERNAL_LOG_WARN("SyncMetricStorage::RecordDouble buck1 is null");
+      buck1->Aggregate(value);
     }
     else
     {
-      buck1->Aggregate(value);
+      OTEL_INTERNAL_LOG_WARN("SyncMetricStorage::RecordDouble buck1 is null");
     }
   }
 
