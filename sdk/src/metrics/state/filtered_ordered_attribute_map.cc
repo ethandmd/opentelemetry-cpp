@@ -28,7 +28,7 @@ FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
   attributes.ForEachKeyValue(
       [&](nostd::string_view key, opentelemetry::common::AttributeValue value) noexcept {
         // OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap inside foreach");
-        OTEL_INTERNAL_LOG_WARN("Processor address: " << static_cast<const void*>(processor) << " key: " << key);
+        // OTEL_INTERNAL_LOG_WARN("Processor address: " << static_cast<const void*>(processor) << " key: " << key);
 
         // if (!key.data())
         // {
@@ -42,17 +42,17 @@ FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
         {
         // OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap calling isPresent check...");
         auto isp = processor->isPresent(key);
-        OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap is present returned");
+        // OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap is present returned");
             if (isp)
             {
-              OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap Setting Attribute...");
+              // OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap Setting Attribute...");
               SetAttribute(key, value);
             }
         }
-        OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap foreach is returning...");
+        // OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap foreach is returning...");
         return true;
       });
-  OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap UpdatingHash...");
+  // OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap UpdatingHash...");
   UpdateHash();
 }
 
