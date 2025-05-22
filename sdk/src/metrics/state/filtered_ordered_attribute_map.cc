@@ -30,14 +30,14 @@ FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
         // OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap inside foreach");
         OTEL_INTERNAL_LOG_WARN("Processor address: " << static_cast<const void*>(processor) << " key: " << key);
 
-        if (!key.data())
-        {
-          OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap key is null");
-        }
-        else
-        {
-            OTEL_INTERNAL_LOG_WARN("Finished checking if key is null");
-        }
+        // if (!key.data())
+        // {
+        //  OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap key is null");
+        // }
+        // else
+        // {
+        //    OTEL_INTERNAL_LOG_WARN("Finished checking if key is null");
+        // }
         if (!processor)
         {
         // OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap calling isPresent check...");
