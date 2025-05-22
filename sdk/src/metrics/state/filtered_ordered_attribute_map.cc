@@ -36,11 +36,12 @@ FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
         {
           OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap key is null");
         }
+        OTEL_INTERNAL_LOG_WARN("Finished checking if key is null");
         if (!processor)
         {
         OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap calling isPresent check...");
         auto isp = processor->isPresent(key);
-        OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap is precent returned");
+        OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap is present returned");
             if (isp)
             {
               OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap Setting Attribute...");
