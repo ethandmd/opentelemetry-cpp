@@ -13,6 +13,8 @@
 #include "opentelemetry/sdk/metrics/state/filtered_ordered_attribute_map.h"
 #include "opentelemetry/version.h"
 
+#include "opentelemetry/sdk/common/global_log_handler.h"
+
 OPENTELEMETRY_BEGIN_NAMESPACE
 namespace sdk
 {
@@ -94,6 +96,11 @@ public:
 
   bool isPresent(nostd::string_view key) const noexcept override
   {
+    // if (!key.data())
+    // {
+    //   OTEL_INTERNAL_LOG_WARN("FilteringAttributesProcessor::isPresent key is null");
+    // }
+    // OTEL_INTERNAL_LOG_WARN("FilteringAttributesProcessor::isPresent determining if key is present...");
     return (allowed_attribute_keys_.find(key.data()) != allowed_attribute_keys_.end());
   }
 

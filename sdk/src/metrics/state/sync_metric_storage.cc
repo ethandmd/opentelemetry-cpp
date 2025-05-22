@@ -16,6 +16,8 @@
 #include "opentelemetry/sdk/metrics/state/temporal_metric_storage.h"
 #include "opentelemetry/version.h"
 
+#include "opentelemetry/sdk/common/global_log_handler.h"
+
 OPENTELEMETRY_BEGIN_NAMESPACE
 namespace sdk
 {
@@ -28,6 +30,7 @@ bool SyncMetricStorage::Collect(CollectorHandle *collector,
                                 opentelemetry::common::SystemTimestamp collection_ts,
                                 nostd::function_ref<bool(MetricData)> callback) noexcept
 {
+  // OTEL_INTERNAL_LOG_WARN("SyncMetricStorage::Collect");
   // Add the current delta metrics to `unreported metrics stash` for all the collectors,
   // this will also empty the delta metrics hashmap, and make it available for
   // recordings

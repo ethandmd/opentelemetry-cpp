@@ -6,6 +6,7 @@
 #include "opentelemetry/sdk/common/attribute_utils.h"
 #include "opentelemetry/sdk/metrics/view/attributes_processor.h"
 #include <cassert>
+#include "opentelemetry/sdk/common/global_log_handler.h"
 
 OPENTELEMETRY_BEGIN_NAMESPACE
 namespace sdk
@@ -17,17 +18,41 @@ FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
     const AttributesProcessor *processor)
     : OrderedAttributeMap()
 {
-  assert(processor);
+  // OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap");
+  OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap attributes @" 
+                         << static_cast<const void *>(&attributes));
+  // if (!processor)
+  // {
+  //   OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap processor is null");
+  // }
   attributes.ForEachKeyValue(
       [&](nostd::string_view key, opentelemetry::common::AttributeValue value) noexcept {
-        assert(key.data());
-        if (!processor || processor->isPresent(key))
+        // OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap inside foreach");
+        OTEL_INTERNAL_LOG_WARN("Processor address: " << static_cast<const void*>(processor) << " key: " << key);
+
+        // if (!key.data())
+        // {
+        //  OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap key is null");
+        // }
+        // else
+        // {
+        //    OTEL_INTERNAL_LOG_WARN("Finished checking if key is null");
+        // }
+        if (!processor)
         {
-          SetAttribute(key, value);
+        // OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap calling isPresent check...");
+        auto isp = processor->isPresent(key);
+        OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap is present returned");
+            if (isp)
+            {
+              OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap Setting Attribute...");
+              SetAttribute(key, value);
+            }
         }
+        OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap foreach is returning...");
         return true;
       });
-
+  OTEL_INTERNAL_LOG_WARN("FilteredOrderedAttributeMap::FilteredOrderedAttributeMap UpdatingHash...");
   UpdateHash();
 }
 

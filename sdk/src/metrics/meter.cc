@@ -39,6 +39,8 @@
 #include "opentelemetry/sdk/metrics/view/view_registry.h"
 #include "opentelemetry/version.h"
 
+#include "opentelemetry/sdk/common/global_log_handler.h"
+
 #ifdef ENABLE_METRICS_EXEMPLAR_PREVIEW
 #  include "opentelemetry/sdk/metrics/exemplar/reservoir_utils.h"
 #endif
@@ -490,6 +492,10 @@ const sdk::instrumentationscope::InstrumentationScope *Meter::GetInstrumentation
 std::unique_ptr<SyncWritableMetricStorage> Meter::RegisterSyncMetricStorage(
     InstrumentDescriptor &instrument_descriptor)
 {
+  OTEL_INTERNAL_LOG_WARN(
+      "[Meter::RegisterSyncMetricStorage] - Registering sync metric storage for instrument:"
+      << InstrumentDescriptorLogStreamable{instrument_descriptor}
+      << InstrumentationScopeLogStreamable{*GetInstrumentationScope()});
   std::lock_guard<opentelemetry::common::SpinLockMutex> guard(storage_lock_);
   auto ctx = meter_context_.lock();
   if (!ctx)
@@ -499,14 +505,20 @@ std::unique_ptr<SyncWritableMetricStorage> Meter::RegisterSyncMetricStorage(
         << "The metric context is invalid");
     return nullptr;
   }
-
+  OTEL_INTERNAL_LOG_WARN(
+      "[Meter::RegisterSyncMetricStorage] - Getting View Registry for instrument:"
+      << InstrumentDescriptorLogStreamable{instrument_descriptor}
+      << InstrumentationScopeLogStreamable{*GetInstrumentationScope()});
   auto view_registry = ctx->GetViewRegistry();
   std::unique_ptr<SyncWritableMetricStorage> storages(new SyncMultiMetricStorage());
 
 #ifdef ENABLE_METRICS_EXEMPLAR_PREVIEW
   auto exemplar_filter_type = ctx->GetExemplarFilter();
 #endif
-
+  OTEL_INTERNAL_LOG_WARN(
+      "[Meter::RegisterSyncMetricStorage] - Finding views for instrument:"
+      << InstrumentDescriptorLogStreamable{instrument_descriptor}
+      << InstrumentationScopeLogStreamable{*GetInstrumentationScope()});
   auto success = view_registry->FindViews(
       instrument_descriptor, *scope_,
       [this, &instrument_descriptor, &storages
@@ -637,6 +649,7 @@ std::unique_ptr<AsyncWritableMetricStorage> Meter::RegisterAsyncMetricStorage(
 std::vector<MetricData> Meter::Collect(CollectorHandle *collector,
                                        opentelemetry::common::SystemTimestamp collect_ts) noexcept
 {
+  // OTEL_INTERNAL_LOG_WARN("[Meter::Collect] - Collecting metrics");
   if (!meter_config_.IsEnabled())
   {
     return std::vector<MetricData>();

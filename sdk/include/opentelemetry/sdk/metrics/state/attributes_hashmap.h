@@ -86,19 +86,34 @@ public:
     // TODO: avoid constructing MetricAttributes from KeyValueIterable for
     // hash_map_.find which is a heavy operation
     MetricAttributes attr{attributes, attributes_processor};
-
     auto it = hash_map_.find(attr);
     if (it != hash_map_.end())
     {
-      return it->second.get();
+      auto ret = it->second.get();
+      // if (!ret)
+      // {
+      //   OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; ret is null");
+      // }
+      return ret;
     }
-    throw std::runtime_error("GetOrSetDefault 0");
     if (IsOverflowAttributes())
     {
-      return GetOrSetOveflowAttributes(aggregation_callback);
+      OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; IsOverflowAttributes");
+      auto ret = GetOrSetOveflowAttributes(aggregation_callback);
+      // if (!ret)
+      // {
+      //   OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; ret is null");
+      // }
+      return ret;
     }
+    OTEL_INTERNAL_LOG_WARN("GetOrSetDefault;");
     auto result = hash_map_.emplace(std::move(attr), aggregation_callback());
-    return result.first->second.get();
+    auto ret = result.first->second.get();
+    // if (!ret)
+    // {
+    //   OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; ret is null");
+    // }
+    return ret;
   }
 
   Aggregation *GetOrSetDefault(
@@ -111,7 +126,6 @@ public:
     {
       return it->second.get();
     }
-    throw std::runtime_error("GetOrSetDefault 0");
     if (IsOverflowAttributes())
     {
       return GetOrSetOveflowAttributes(aggregation_callback);
@@ -152,6 +166,12 @@ public:
 
   void Set(const MetricAttributes &attributes, std::unique_ptr<Aggregation> aggr)
   {
+    // if (!aggr)
+    // {
+    //   OTEL_INTERNAL_LOG_WARN("Set; aggr is null");
+    // } else {
+    //   OTEL_INTERNAL_LOG_WARN("Set; aggr is valid");
+    // }
     auto it = hash_map_.find(attributes);
     if (it != hash_map_.end())
     {
@@ -223,12 +243,12 @@ private:
 
   Aggregation *GetOrSetOveflowAttributes(std::unique_ptr<Aggregation> agg)
   {
+    OTEL_INTERNAL_LOG_WARN("GetOrSetOveflowAttributes");
     auto it = hash_map_.find(kOverflowAttributes);
     if (it != hash_map_.end())
     {
       return it->second.get();
     }
-    std::runtime_error("GetOrSetDefault 4");
     auto result = hash_map_.emplace(kOverflowAttributes, std::move(agg));
     return result.first->second.get();
   }
