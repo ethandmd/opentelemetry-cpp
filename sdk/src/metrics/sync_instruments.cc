@@ -492,8 +492,7 @@ void DoubleHistogram::Record(double value,
                              const opentelemetry::common::KeyValueIterable &attributes,
                              const opentelemetry::context::Context &context) noexcept
 {
-  OTEL_INTERNAL_LOG_WARN(
-      "[DoubleHistogram::Record(V,A,C)] for " << instrument_descriptor_.name_ << " value: " << value);
+  //OTEL_INTERNAL_LOG_WARN("[DoubleHistogram::Record(V,A,C)] for " << instrument_descriptor_.name_ << " value: " << value);
   if (value < 0)
   {
     OTEL_INTERNAL_LOG_WARN(
