@@ -142,7 +142,7 @@ void Base2ExponentialHistogramAggregation::Aggregate(
     double value,
     const PointAttributes & /* attributes */) noexcept
 {
-  OTEL_INTERNAL_LOG_WARN("Base2ExponentialHistogramAggregation::Aggregate");
+  // OTEL_INTERNAL_LOG_WARN("Base2ExponentialHistogramAggregation::Aggregate");
   const std::lock_guard<opentelemetry::common::SpinLockMutex> locked(lock_);
   point_data_.sum_ += value;
   point_data_.count_++;

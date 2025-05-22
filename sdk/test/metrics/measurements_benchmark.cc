@@ -26,11 +26,6 @@
 #include "opentelemetry/sdk/metrics/instruments.h"
 #include "opentelemetry/sdk/metrics/meter_provider.h"
 #include "opentelemetry/sdk/metrics/metric_reader.h"
-#include "opentelemetry/sdk/metrics/view/view_factory.h"
-#include "opentelemetry/sdk/metrics/view/instrument_selector.h"
-#include "opentelemetry/sdk/metrics/view/instrument_selector_factory.h"
-#include "opentelemetry/sdk/metrics/view/meter_selector_factory.h"
-
 
 using namespace opentelemetry;
 using namespace opentelemetry::sdk::instrumentationscope;
@@ -102,70 +97,6 @@ void BM_MeasurementsTest(benchmark::State &state)
   exporter->Collect([&](ResourceMetrics & /*rm*/) { return true; });
 }
 BENCHMARK(BM_MeasurementsTest);
-
-void BM_MeasurementsBase2HistogramTest(benchmark::State &state)
-{
-  MeterProvider mp;
-  auto histogram_base2_aggregation_config =
-      std::unique_ptr<Base2ExponentialHistogramAggregationConfig>(
-          new Base2ExponentialHistogramAggregationConfig);
-  histogram_base2_aggregation_config->max_scale_      = 3;
-  histogram_base2_aggregation_config->record_min_max_ = true;
-  histogram_base2_aggregation_config->max_buckets_    = 100;
-
-  std::shared_ptr<AggregationConfig> base2_aggregation_config(
-      std::move(histogram_base2_aggregation_config));
-
-  auto histogram_base2_view = ViewFactory::Create(
-      "*", "", "", AggregationType::kBase2ExponentialHistogram,
-      base2_aggregation_config);
-  auto histogram_base2_instrument_selector = InstrumentSelectorFactory::Create(
-      InstrumentType::kHistogram, "*", "");
-  mp.AddView(
-      std::unique_ptr<InstrumentSelector>(std::move(histogram_base2_instrument_selector)),
-      std::unique_ptr<MeterSelector>(MeterSelectorFactory::Create("", "", "")),
-      std::move(histogram_base2_view));
-  auto m = mp.GetMeter("meter1", "version1", "schema1");
-
-  std::shared_ptr<MetricReader> exporter(new MockMetricExporter());
-  mp.AddMetricReader(exporter);
-  auto h = m->CreateDoubleHistogram("exphist", "exphist_description", "exphist_unit");
-  size_t MAX_MEASUREMENTS = 10000;  // keep low to prevent CI failure due to timeout
-  size_t NUM_CORES        = 8;
-  std::vector<std::thread> threads;
-  std::map<std::string, uint32_t> attributes[1000];
-  size_t total_index = 0;
-  for (uint32_t i = 0; i < 10; i++)
-  {
-    for (uint32_t j = 0; j < 10; j++)
-      for (uint32_t k = 0; k < 10; k++)
-        attributes[total_index++] = {{"dim1", i}, {"dim2", j}, {"dim3", k}};
-  }
-  while (state.KeepRunning())
-  {
-    threads.clear();
-    std::atomic<size_t> cur_processed{0};
-    for (size_t i = 0; i < NUM_CORES; i++)
-    {
-      threads.push_back(std::thread([&h, &cur_processed, &MAX_MEASUREMENTS, &attributes]() {
-        while (cur_processed++ <= MAX_MEASUREMENTS)
-        {
-          size_t index = rand() % 1000;
-          h->Record(1.0,
-                 opentelemetry::common::KeyValueIterableView<std::map<std::string, uint32_t>>(
-                     attributes[index]),
-                 opentelemetry::context::Context{});
-        }
-      }));
-    }
-    for (auto &thread : threads)
-    {
-      thread.join();
-    }
-  }
-  exporter->Collect([&](ResourceMetrics & /*rm*/) { return true; });
-}
-BENCHMARK(BM_MeasurementsBase2HistogramTest);
 
 }  // namespace
 BENCHMARK_MAIN();

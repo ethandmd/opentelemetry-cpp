@@ -106,7 +106,7 @@ public:
       // }
       return ret;
     }
-    OTEL_INTERNAL_LOG_WARN("GetOrSetDefault;");
+    // OTEL_INTERNAL_LOG_WARN("GetOrSetDefault;");
     auto result = hash_map_.emplace(std::move(attr), aggregation_callback());
     auto ret = result.first->second.get();
     // if (!ret)
@@ -139,7 +139,7 @@ public:
       MetricAttributes &&attributes,
       nostd::function_ref<std::unique_ptr<Aggregation>()> aggregation_callback)
   {
-    OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; attributes, aggregation_callback");
+    // OTEL_INTERNAL_LOG_WARN("GetOrSetDefault; attributes, aggregation_callback");
     auto it = hash_map_.find(attributes);
     if (it != hash_map_.end())
     {
@@ -150,7 +150,7 @@ public:
     {
       return GetOrSetOveflowAttributes(aggregation_callback);
     }
-    OTEL_INTERNAL_LOG_WARN("auto result = hash_map_.emplace(std::move(attributes), aggregation_callback())");
+    // OTEL_INTERNAL_LOG_WARN("auto result = hash_map_.emplace(std::move(attributes), aggregation_callback())");
     auto result = hash_map_.emplace(std::move(attributes), aggregation_callback());
     return result.first->second.get();
   }
@@ -243,12 +243,13 @@ private:
 
   Aggregation *GetOrSetOveflowAttributes(std::unique_ptr<Aggregation> agg)
   {
-    OTEL_INTERNAL_LOG_WARN("GetOrSetOveflowAttributes");
+    // OTEL_INTERNAL_LOG_WARN("GetOrSetOveflowAttributes");
     auto it = hash_map_.find(kOverflowAttributes);
     if (it != hash_map_.end())
     {
       return it->second.get();
     }
+
     auto result = hash_map_.emplace(kOverflowAttributes, std::move(agg));
     return result.first->second.get();
   }

@@ -19,7 +19,7 @@ namespace metrics
 void Provider::SetMeterProvider(
     const nostd::shared_ptr<opentelemetry::metrics::MeterProvider> &mp) noexcept
 {
-  OTEL_INTERNAL_LOG_WARN("Provider::SetMeterProvider");
+  // OTEL_INTERNAL_LOG_WARN("Provider::SetMeterProvider");
   bool disabled = opentelemetry::sdk::common::GetSdkDisabled();
 
   if (!disabled)
