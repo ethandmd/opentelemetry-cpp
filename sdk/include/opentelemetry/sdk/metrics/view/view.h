@@ -29,8 +29,8 @@ public:
        const std::string &unit                               = "",
        AggregationType aggregation_type                      = AggregationType::kDefault,
        std::shared_ptr<AggregationConfig> aggregation_config = nullptr,
-       std::unique_ptr<opentelemetry::sdk::metrics::AttributesProcessor> attributes_processor =
-           std::unique_ptr<opentelemetry::sdk::metrics::AttributesProcessor>(
+       std::shared_ptr<opentelemetry::sdk::metrics::AttributesProcessor> attributes_processor =
+           std::shared_ptr<opentelemetry::sdk::metrics::AttributesProcessor>(
                new opentelemetry::sdk::metrics::DefaultAttributesProcessor()))
       : name_(name),
         description_(description),
@@ -53,10 +53,16 @@ public:
     return aggregation_config_.get();
   }
 
-  virtual const opentelemetry::sdk::metrics::AttributesProcessor &GetAttributesProcessor()
+  // virtual const opentelemetry::sdk::metrics::AttributesProcessor &GetAttributesProcessor()
+  //     const noexcept
+  // {
+  //   return *attributes_processor_.get();
+  // }
+
+  virtual const std::shared_ptr<opentelemetry::sdk::metrics::AttributesProcessor> GetAttributesProcessor()
       const noexcept
   {
-    return *attributes_processor_.get();
+    return attributes_processor_;
   }
 
 private:
@@ -65,7 +71,7 @@ private:
   std::string unit_;
   AggregationType aggregation_type_;
   std::shared_ptr<AggregationConfig> aggregation_config_;
-  std::unique_ptr<opentelemetry::sdk::metrics::AttributesProcessor> attributes_processor_;
+  std::shared_ptr<opentelemetry::sdk::metrics::AttributesProcessor> attributes_processor_;
 };
 }  // namespace metrics
 }  // namespace sdk
