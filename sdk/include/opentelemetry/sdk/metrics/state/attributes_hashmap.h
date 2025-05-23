@@ -76,7 +76,7 @@ public:
    */
   Aggregation *GetOrSetDefault(
       const opentelemetry::common::KeyValueIterable &attributes,
-      const AttributesProcessor *attributes_processor,
+      const std::shared_ptr<AttributesProcessor> attributes_processor,
       nostd::function_ref<std::unique_ptr<Aggregation>()> aggregation_callback)
   {
     // TODO: avoid constructing MetricAttributes from KeyValueIterable for
@@ -139,7 +139,7 @@ public:
    * Set the value for given key, overwriting the value if already present
    */
   void Set(const opentelemetry::common::KeyValueIterable &attributes,
-           const AttributesProcessor *attributes_processor,
+           const std::shared_ptr<AttributesProcessor> attributes_processor,
            std::unique_ptr<Aggregation> aggr)
   {
     Set(MetricAttributes{attributes, attributes_processor}, std::move(aggr));

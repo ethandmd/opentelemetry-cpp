@@ -22,7 +22,7 @@ template <class T>
 class ObserverResultT final : public opentelemetry::metrics::ObserverResultT<T>
 {
 public:
-  explicit ObserverResultT(const AttributesProcessor *attributes_processor = nullptr)
+  explicit ObserverResultT(const std::shared_ptr<AttributesProcessor> attributes_processor = nullptr)
       : attributes_processor_(attributes_processor)
   {}
 
@@ -46,7 +46,7 @@ public:
 
 private:
   std::unordered_map<MetricAttributes, T, AttributeHashGenerator> data_;
-  const AttributesProcessor *attributes_processor_;
+  std::shared_ptr<AttributesProcessor> attributes_processor_;
 };
 }  // namespace metrics
 }  // namespace sdk

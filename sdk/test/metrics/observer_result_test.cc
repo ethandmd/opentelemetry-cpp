@@ -14,7 +14,8 @@
 using namespace opentelemetry::sdk::metrics;
 TEST(ObserverResult, BasicTests)
 {
-  const AttributesProcessor *attributes_processor = new DefaultAttributesProcessor();
+std::shared_ptr<DefaultAttributesProcessor> attributes_processor =
+      std::make_shared<DefaultAttributesProcessor>();
 
   ObserverResultT<int64_t> observer_result(attributes_processor);
 
@@ -35,6 +36,4 @@ TEST(ObserverResult, BasicTests)
   observer_result.Observe(
       40, opentelemetry::common::KeyValueIterableView<std::map<std::string, int64_t>>(m2));
   EXPECT_EQ(observer_result.GetMeasurements().size(), 3);
-
-  delete attributes_processor;
 }

@@ -47,12 +47,12 @@ public:
   }
 
   FilteredOrderedAttributeMap(const opentelemetry::common::KeyValueIterable &attributes,
-                              const opentelemetry::sdk::metrics::AttributesProcessor *processor);
+                              const std::shared_ptr<opentelemetry::sdk::metrics::AttributesProcessor> processor);
 
   FilteredOrderedAttributeMap(
       std::initializer_list<std::pair<nostd::string_view, opentelemetry::common::AttributeValue>>
           attributes,
-      const opentelemetry::sdk::metrics::AttributesProcessor *processor);
+      const std::shared_ptr<opentelemetry::sdk::metrics::AttributesProcessor> processor);
 
   //
   // Copy and move constructors, assignment operators

@@ -13,7 +13,7 @@ namespace metrics
 {
 FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
     const opentelemetry::common::KeyValueIterable &attributes,
-    const AttributesProcessor *processor)
+    const std::shared_ptr<AttributesProcessor> processor)
     : OrderedAttributeMap()
 {
   attributes.ForEachKeyValue(
@@ -31,7 +31,7 @@ FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
 FilteredOrderedAttributeMap::FilteredOrderedAttributeMap(
     std::initializer_list<std::pair<nostd::string_view, opentelemetry::common::AttributeValue>>
         attributes,
-    const AttributesProcessor *processor)
+    const std::shared_ptr<AttributesProcessor> processor)
     : OrderedAttributeMap()
 {
   for (auto &kv : attributes)

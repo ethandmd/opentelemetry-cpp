@@ -119,7 +119,7 @@ public:
 
     std::lock_guard<opentelemetry::common::SpinLockMutex> guard(attribute_hashmap_lock_);
     attributes_hashmap_
-        ->GetOrSetDefault(attributes, &*attributes_processor_, create_default_aggregation_)
+        ->GetOrSetDefault(attributes, attributes_processor_, create_default_aggregation_)
         ->Aggregate(value);
   }
 
@@ -160,7 +160,7 @@ public:
 #endif
     std::lock_guard<opentelemetry::common::SpinLockMutex> guard(attribute_hashmap_lock_);
     attributes_hashmap_
-        ->GetOrSetDefault(attributes, &*attributes_processor_, create_default_aggregation_)
+        ->GetOrSetDefault(attributes, attributes_processor_, create_default_aggregation_)
         ->Aggregate(value);
   }
 
